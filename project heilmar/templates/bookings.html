@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Cafe Admin Dashboard</title>
+
+    <style>
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* =========================
+           BODY
+        ========================= */
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b0b0b;
+            color: white;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #111;
+
+            border-right: 1px solid #2c2c2c;
+
+            padding: 30px 20px;
+
+            z-index: 1000;
+        }
+
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+
+            color: #d4af37;
+
+            margin-bottom: 50px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .sidebar a {
+            display: block;
+
+            text-decoration: none;
+
+            color: #aaa;
+
+            padding: 14px;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            transition: 0.3s;
+        }
+
+
+        .sidebar a:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+
+        .logout {
+            position: absolute;
+
+            bottom: 30px;
+
+            width: 190px;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+
+            padding: 40px;
+
+            max-width: 1600px;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .header h1 {
+            font-size: 32px;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .header p {
+            color: #888;
+
+            margin-top: 7px;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .card {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #181818,
+                    #101010
+                );
+
+            border: 1px solid #2c2c2c;
+
+            border-radius: 20px;
+
+            padding: 24px;
+
+            overflow: hidden;
+
+            transition: 0.3s;
+        }
+
+
+        .card:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(212,175,55,.45);
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,.35);
+        }
+
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: #24200f;
+
+            color: #d4af37;
+
+            font-size: 20px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .card h3 {
+            color: #888;
+
+            font-size: 11px;
+
+            letter-spacing: 1.5px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .card .number {
+            font-size: 34px;
+
+            font-weight: 700;
+
+            color: #d4af37;
+
+            margin-bottom: 7px;
+        }
+
+
+        .card p {
+            color: #666;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           ANALYTICS
+        ========================= */
+
+        .analytics-box {
+            background:
+                linear-gradient(
+                    145deg,
+                    #181818,
+                    #101010
+                );
+
+            border: 1px solid #2c2c2c;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin: 0 auto 30px auto;
+
+            max-width: 700px;
+
+            width: 100%;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,.18);
+        }
+
+
+        .analytics-header {
+            text-align: center;
+        }
+
+
+        .analytics-header h2 {
+            font-size: 20px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .analytics-header p {
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        .chart {
+            margin-top: 25px;
+
+            max-width: 560px;
+
+            margin-left: auto;
+
+            margin-right: auto;
+        }
+
+
+        .bar-item {
+            margin-bottom: 20px;
+        }
+
+
+        .bar-label {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+        }
+
+
+        .bar-label span {
+            color: #aaa;
+        }
+
+
+        .bar-label strong {
+            color: #d4af37;
+        }
+
+
+        .bar-bg {
+            width: 100%;
+
+            height: 9px;
+
+            background: #252525;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .bar {
+            height: 100%;
+
+            border-radius: 20px;
+
+            transition: width .8s ease;
+        }
+
+
+        .confirmed-bar {
+            background: #43c878;
+        }
+
+
+        .pending-bar {
+            background: #d4af37;
+        }
+
+
+        .cancelled-bar {
+            background: #e85c5c;
+        }
+
+
+        /* =========================
+           TABLE BOX
+        ========================= */
+
+        .table-box {
+            background: #151515;
+
+            border: 1px solid #2b2b2b;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            overflow-x: auto;
+        }
+
+
+        .table-title {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .table-title h2 {
+            font-size: 20px;
+        }
+
+
+        /* =========================
+           FILTERS
+        ========================= */
+
+        .filters {
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 25px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .filters input,
+        .filters select {
+            background: #101010;
+
+            border: 1px solid #333;
+
+            color: white;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 13px;
+        }
+
+
+        .filters input:focus,
+        .filters select:focus {
+            border-color: #d4af37;
+        }
+
+
+        .filters input[type="text"] {
+            min-width: 250px;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 950px;
+        }
+
+
+        th {
+            text-align: left;
+
+            color: #888;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+
+            padding: 15px;
+
+            border-bottom: 1px solid #333;
+        }
+
+
+        td {
+            padding: 16px 15px;
+
+            border-bottom: 1px solid #222;
+
+            font-size: 13px;
+
+            color: #ddd;
+        }
+
+
+        tr {
+            transition: 0.2s;
+        }
+
+
+        tr:hover {
+            background: #1b1b1b;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+        }
+
+
+        .status-confirmed {
+            background: rgba(67,200,120,.12);
+
+            color: #43c878;
+        }
+
+
+        .status-pending {
+            background: rgba(212,175,55,.12);
+
+            color: #d4af37;
+        }
+
+
+        .status-cancelled {
+            background: rgba(232,92,92,.12);
+
+            color: #e85c5c;
+        }
+
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .actions {
+            display: flex;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .btn {
+            border: none;
+
+            padding: 8px 11px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            display: inline-block;
+
+            transition: .25s;
+        }
+
+
+        .btn-confirm {
+            background: #173d29;
+
+            color: #43c878;
+        }
+
+
+        .btn-confirm:hover {
+            background: #43c878;
+
+            color: #000;
+        }
+
+
+        .btn-pending {
+            background: #3c3214;
+
+            color: #d4af37;
+        }
+
+
+        .btn-pending:hover {
+            background: #d4af37;
+
+            color: #000;
+        }
+
+
+        .btn-cancel {
+            background: #3d1919;
+
+            color: #e85c5c;
+        }
+
+
+        .btn-cancel:hover {
+            background: #e85c5c;
+
+            color: #000;
+        }
+
+
+        .btn-whatsapp {
+            background: #173d29;
+
+            color: #54d98b;
+        }
+
+
+        .btn-whatsapp:hover {
+            background: #54d98b;
+
+            color: #000;
+        }
+
+
+        .btn-delete {
+            background: #2c1515;
+
+            color: #ff6b6b;
+        }
+
+
+        .btn-delete:hover {
+            background: #ff4d4d;
+
+            color: white;
+        }
+
+
+        /* =========================
+           EMPTY MESSAGE
+        ========================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 40px;
+
+            color: #666;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+
+            .logout {
+                width: 150px;
+            }
+
+
+            .main {
+                margin-left: 190px;
+
+                padding: 25px;
+            }
+
+
+            .header {
+                display: block;
+            }
+
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+
+            .analytics-box {
+                padding: 20px;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                border-right: none;
+
+                border-bottom: 1px solid #2c2c2c;
+            }
+
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+
+            .logout {
+                position: static;
+
+                width: auto;
+            }
+
+
+            .main {
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+
+            .filters {
+                flex-direction: column;
+            }
+
+
+            .filters input[type="text"] {
+                min-width: 100%;
+
+                width: 100%;
+            }
+
+
+            .filters input,
+            .filters select {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            CAFE ADMIN
+        </div>
+
+
+        <a href="/admin">
+            🏠 Dashboard
+        </a>
+
+
+        <a href="/">
+            🌐 View Website
+        </a>
+
+
+        <a href="/logout" class="logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <div class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Manage your cafe reservations
+                    and bookings.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             STAT CARDS
+        ========================= -->
+
+        <div class="stats">
+
+
+            <!-- TOTAL BOOKINGS -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    📋
+                </div>
+
+                <h3>
+                    TOTAL BOOKINGS
+                </h3>
+
+                <div class="number">
+                    {{ total_bookings }}
+                </div>
+
+                <p>
+                    All reservations
+                </p>
+
+            </div>
+
+
+
+            <!-- TOTAL GUESTS -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    👥
+                </div>
+
+                <h3>
+                    TOTAL GUESTS
+                </h3>
+
+                <div class="number">
+                    {{ total_guests }}
+                </div>
+
+                <p>
+                    Total customers
+                </p>
+
+            </div>
+
+
+
+            <!-- TODAY BOOKINGS -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    📅
+                </div>
+
+                <h3>
+                    TODAY BOOKINGS
+                </h3>
+
+                <div class="number">
+                    {{ today_bookings }}
+                </div>
+
+                <p>
+                    Today's reservations
+                </p>
+
+            </div>
+
+
+
+            <!-- CONFIRMED -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    CONFIRMED
+                </h3>
+
+                <div class="number">
+                    {{ confirmed_bookings }}
+                </div>
+
+                <p>
+                    Confirmed reservations
+                </p>
+
+            </div>
+
+
+
+            <!-- PENDING -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ⏳
+                </div>
+
+                <h3>
+                    PENDING
+                </h3>
+
+                <div class="number">
+                    {{ pending_bookings }}
+                </div>
+
+                <p>
+                    Waiting for confirmation
+                </p>
+
+            </div>
+
+
+
+            <!-- CANCELLED -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ✕
+                </div>
+
+                <h3>
+                    CANCELLED
+                </h3>
+
+                <div class="number">
+                    {{ cancelled_bookings }}
+                </div>
+
+                <p>
+                    Cancelled reservations
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             BOOKING ANALYTICS
+        ========================= -->
+
+        <div class="analytics-box">
+
+            <div class="analytics-header">
+
+                <h2>
+                    Booking Analytics
+                </h2>
+
+                <p>
+                    Reservation status overview
+                </p>
+
+            </div>
+
+
+            <div class="chart">
+
+
+                <!-- CONFIRMED -->
+
+                <div class="bar-item">
+
+                    <div class="bar-label">
+
+                        <span>
+                            Confirmed
+                        </span>
+
+                        <strong>
+                            {{ confirmed_bookings }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="bar-bg">
+
+                        <div
+                            class="bar confirmed-bar"
+                            style="width:
+                            {% if total_bookings > 0 %}
+                                {{ (confirmed_bookings / total_bookings * 100)|round(0) }}
+                            {% else %}
+                                0
+                            {% endif %}%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PENDING -->
+
+                <div class="bar-item">
+
+                    <div class="bar-label">
+
+                        <span>
+                            Pending
+                        </span>
+
+                        <strong>
+                            {{ pending_bookings }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="bar-bg">
+
+                        <div
+                            class="bar pending-bar"
+                            style="width:
+                            {% if total_bookings > 0 %}
+                                {{ (pending_bookings / total_bookings * 100)|round(0) }}
+                            {% else %}
+                                0
+                            {% endif %}%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CANCELLED -->
+
+                <div class="bar-item">
+
+                    <div class="bar-label">
+
+                        <span>
+                            Cancelled
+                        </span>
+
+                        <strong>
+                            {{ cancelled_bookings }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="bar-bg">
+
+                        <div
+                            class="bar cancelled-bar"
+                            style="width:
+                            {% if total_bookings > 0 %}
+                                {{ (cancelled_bookings / total_bookings * 100)|round(0) }}
+                            {% else %}
+                                0
+                            {% endif %}%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             RECENT RESERVATIONS
+        ========================= -->
+
+        <div class="table-box">
+
+
+            <div class="table-title">
+
+                <h2>
+                    Recent Reservations
+                </h2>
+
+            </div>
+
+
+
+            <!-- FILTERS -->
+
+            <div class="filters">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search customer or phone..."
+                    onkeyup="filterBookings()">
+
+
+                <select
+                    id="statusFilter"
+                    onchange="filterBookings()">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="Confirmed">
+                        Confirmed
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Cancelled">
+                        Cancelled
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="date"
+                    id="dateFilter"
+                    onchange="filterBookings()">
+
+            </div>
+
+
+
+            <!-- TABLE -->
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Guests
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="bookingTable">
+
+
+                    {% for booking in bookings %}
+
+                    <tr
+                        data-name="{{ booking['name'] }}"
+                        data-phone="{{ booking['phone'] }}"
+                        data-status="{{ booking['status'] }}"
+                        data-date="{{ booking['date'] }}">
+
+
+                        <td>
+                            {{ booking['name'] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking['phone'] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking['date'] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking['time'] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking['guests'] }}
+                        </td>
+
+
+                        <td>
+
+                            {% if booking['status'] == 'Confirmed' %}
+
+                                <span class="status status-confirmed">
+                                    Confirmed
+                                </span>
+
+                            {% elif booking['status'] == 'Pending' %}
+
+                                <span class="status status-pending">
+                                    Pending
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-cancelled">
+                                    Cancelled
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="actions">
+
+
+                                <a
+                                    href="/update-status/{{ booking['id'] }}/Confirmed"
+                                    class="btn btn-confirm">
+
+                                    Confirm
+
+                                </a>
+
+
+                                <a
+                                    href="/update-status/{{ booking['id'] }}/Pending"
+                                    class="btn btn-pending">
+
+                                    Pending
+
+                                </a>
+
+
+                                <a
+                                    href="/update-status/{{ booking['id'] }}/Cancelled"
+                                    class="btn btn-cancel">
+
+                                    Cancel
+
+                                </a>
+
+
+                                <a
+                                    href="/whatsapp/{{ booking['id'] }}"
+                                    class="btn btn-whatsapp">
+
+                                    WhatsApp
+
+                                </a>
+
+
+                                <a
+                                    href="/delete/{{ booking['id'] }}"
+                                    class="btn btn-delete"
+                                    onclick="return confirm('Delete this booking?');">
+
+                                    Delete
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty">
+
+                            No bookings found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        function filterBookings() {
+
+            const search =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase();
+
+
+            const status =
+                document
+                    .getElementById("statusFilter")
+                    .value;
+
+
+            const date =
+                document
+                    .getElementById("dateFilter")
+                    .value;
+
+
+            const rows =
+                document.querySelectorAll(
+                    "#bookingTable tr"
+                );
+
+
+            rows.forEach(function(row) {
+
+                const name =
+                    row.dataset.name
+                    ? row.dataset.name.toLowerCase()
+                    : "";
+
+
+                const phone =
+                    row.dataset.phone
+                    ? row.dataset.phone.toLowerCase()
+                    : "";
+
+
+                const rowStatus =
+                    row.dataset.status || "";
+
+
+                const rowDate =
+                    row.dataset.date || "";
+
+
+                const matchesSearch =
+                    name.includes(search) ||
+                    phone.includes(search);
+
+
+                const matchesStatus =
+                    status === "" ||
+                    rowStatus === status;
+
+
+                const matchesDate =
+                    date === "" ||
+                    rowDate === date;
+
+
+                if (
+                    matchesSearch &&
+                    matchesStatus &&
+                    matchesDate
+                ) {
+
+                    row.style.display = "";
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
